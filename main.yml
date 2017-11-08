@@ -3,8 +3,8 @@
   connection: local
 
   vars:
-   homebrew_installed_packages:
-     - imagemagick
+    homebrew_installed_packages:
+      - imagemagick
     homebrew_cask_apps:
       - atom
       - docker
