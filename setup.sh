@@ -33,5 +33,5 @@ else
   cd /apps/mac-dev-setup && git pull
 fi
 
-cd /appps/mac-dev-setup && ansible-playbook main.yml
+cd /apps/mac-dev-setup && ansible-playbook main.yml
 
