@@ -37,4 +37,4 @@ else
   cd /apps/mac-dev-setup && git pull
 fi
 
-cd /apps/mac-dev-setup && ansible-playbook main.yml
+cd /apps/mac-dev-setup && chown $scriptUser /apps && ansible-playbook main.yml
