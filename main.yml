@@ -2,5 +2,15 @@
 - hosts: all
   connection: local
 
-  tasks:
-    - command: 'ls -l /'
+  vars:
+   homebrew_installed_packages:
+     - imagemagick
+    homebrew_cask_apps:
+      - atom
+      - docker
+      - firefox
+      - google-chrome
+      - slack
+
+  roles:
+    - geerlingguy.homebrew
