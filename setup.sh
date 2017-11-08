@@ -21,6 +21,17 @@ if [[ ! `ansible --version` ]]; then
   pip install ansible
 fi
 
-mkdir -p /apps
-chown $scriptUser /apps
+if [[ ! -d /apps ]]; then
+  mkdir -p /apps
+  chown $scriptUser /apps
+fi
+
+if [[ ! -d /apps/mac-dev-setup ]]; then
+  git clone git@github.com:anthonycrobinson/mac-dev-setup.git /apps/mac-dev-setup
+  chown -R $scriptUser /apps/mac-dev-setup
+else
+  cd /apps/mac-dev-setup && git pull
+fi
+
+cd /appps/mac-dev-setup && ansible-playbook main.yml
 
