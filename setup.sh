@@ -3,15 +3,15 @@ set -e
 
 scriptUser=`logname`
 
-# if [[ ! `xcode-select -v` ]]; then
-#   touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
-#   PROD=$(softwareupdate -l |
-#     grep "\*.*Command Line" |
-#     head -n 1 | awk -F"*" '{print $2}' |
-#     sed -e 's/^ *//' |
-#     tr -d '\n')
-#   softwareupdate -i "$PROD" --verbose;
-# fi
+if [[ ! `xcode-select -p` ]]; then
+  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
+  PROD=$(softwareupdate -l |
+    grep "\*.*Command Line" |
+    head -n 1 | awk -F"*" '{print $2}' |
+    sed -e 's/^ *//' |
+    tr -d '\n')
+  softwareupdate -i "$PROD" --verbose;
+fi
 
 if [[ ! `pip -V` ]]; then
   easy_install pip
@@ -22,7 +22,7 @@ if [[ ! `ansible --version` ]]; then
 fi
 
 if [[ ! -d /home/$scriptUser/.ansible/roles/geerlingguy.homebrew ]]; then
-  ansible-galaxy install geerlingguy.homebrew
+  su - $scriptUser -l -c 'ansible-galaxy install geerlingguy.homebrew'
 fi
 
 if [[ ! -d /apps ]]; then
@@ -31,10 +31,9 @@ if [[ ! -d /apps ]]; then
 fi
 
 if [[ ! -d /apps/mac-dev-setup ]]; then
-  git clone git@github.com:anthonycrobinson/mac-dev-setup.git /apps/mac-dev-setup
-  chown -R $scriptUser /apps/mac-dev-setup
+  su - $scriptUser -c 'git clone https://github.com/anthonycrobinson/mac-dev-setup.git /apps/mac-dev-setup'
 else
-  cd /apps/mac-dev-setup && git pull
+  su - $scriptUser -c 'cd /apps/mac-dev-setup && git pull'
 fi
 
-cd /apps/mac-dev-setup && chown $scriptUser /apps && ansible-playbook main.yml
+su - $scriptUser -l -c 'cd /apps/mac-dev-setup && ansible-playbook main.yml -K'
